@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8fafc">
+  <title>TechTutor AI — Your learning workspace</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="/" aria-label="TechTutor AI home">
+        <span class="brand-icon" aria-hidden="true">T</span>
+        <span class="brand-copy"><strong>TechTutor</strong><small>AI LEARNING WORKSPACE</small></span>
+      </a>
+
+      <button id="new-chat" class="new-chat" type="button"><span aria-hidden="true">＋</span> New conversation</button>
+
+      <div class="sidebar-section">
+        <div class="section-label">WORKSPACE</div>
+        <div class="workspace-nav" aria-current="page"><span class="nav-glyph" aria-hidden="true">▦</span> Learning assistant</div>
+      </div>
+
+      <div class="history-section">
+        <div class="history-heading"><span>RECENT CONVERSATIONS</span></div>
+        <nav id="history-list" class="history-list" aria-label="Recent conversations"></nav>
+      </div>
+
+      <div class="sidebar-settings">
+        <label class="control-label" for="model-select">LOCAL MODEL</label>
+        <select id="model-select" aria-label="Choose an installed Ollama model"><option>Connecting to Ollama…</option></select>
+        <div id="model-status" class="connection-status" role="status"><span class="status-dot"></span><span>Checking local model…</span></div>
+        <div class="sidebar-actions">
+          <span class="control-label">APPEARANCE</span>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch color theme"><span aria-hidden="true">☾</span><span>Dark mode</span></button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="privacy-mark" aria-hidden="true">✓</div>
+        <div><strong>Private by design</strong><span>Runs on your device</span></div>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <div class="topbar-start">
+          <button id="mobile-menu" class="icon-button menu-toggle" type="button" aria-label="Open workspace navigation">☰</button>
+          <button id="collapse-sidebar" class="icon-button desktop-toggle" type="button" aria-label="Collapse workspace navigation" title="Collapse navigation">◧</button>
+          <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-separator">/</span><strong id="workspace-title">New conversation</strong></div>
+        </div>
+        <div class="topbar-actions">
+          <span class="private-status"><span class="status-dot"></span> Local &amp; private</span>
+          <button id="context-toggle" class="context-toggle" type="button" aria-expanded="true" aria-controls="context-panel"><span aria-hidden="true">☷</span> Session context</button>
+          <button id="mobile-context" class="icon-button mobile-context-toggle" type="button" aria-label="Show session context">☷</button>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <section class="chat-area" aria-label="Learning assistant">
+          <div id="welcome" class="welcome">
+            <div class="welcome-kicker"><span class="kicker-icon" aria-hidden="true">✳</span> YOUR PERSONAL LEARNING ASSISTANT</div>
+            <h1>Make room for<br><span>understanding.</span></h1>
+            <p class="welcome-copy">Explore a hard topic, work through an example, or turn a question into a learning plan. Your conversations stay on this device.</p>
+
+            <div class="subject-picker">
+              <div class="section-title-row"><h2>Choose a learning area</h2><span>PERSONALIZE YOUR SESSION</span></div>
+              <div class="subject-grid" role="group" aria-label="Choose a learning subject">
+                <button class="subject-card active" data-subject="AI/ML" type="button" aria-pressed="true"><span class="subject-icon">✳</span><span class="subject-copy"><strong>AI &amp; machine learning</strong><small>Models, LLMs, deep learning</small></span><span class="subject-check" aria-hidden="true">✓</span></button>
+                <button class="subject-card" data-subject="Web Development" type="button" aria-pressed="false"><span class="subject-icon">⌘</span><span class="subject-copy"><strong>Web development</strong><small>Frontend, backend, APIs</small></span><span class="subject-check" aria-hidden="true">✓</span></button>
+                <button class="subject-card" data-subject="UML" type="button" aria-pressed="false"><span class="subject-icon">◇</span><span class="subject-copy"><strong>Software design</strong><small>UML, architecture, Agile</small></span><span class="subject-check" aria-hidden="true">✓</span></button>
+                <button class="subject-card" data-subject="Programming" type="button" aria-pressed="false"><span class="subject-icon">&lt;/&gt;</span><span class="subject-copy"><strong>Programming</strong><small>Python, Java, SQL, algorithms</small></span><span class="subject-check" aria-hidden="true">✓</span></button>
+                <button class="subject-card" data-subject="Career Guidance" type="button" aria-pressed="false"><span class="subject-icon">↗</span><span class="subject-copy"><strong>Career guidance</strong><small>Interviews, resumes, projects</small></span><span class="subject-check" aria-hidden="true">✓</span></button>
+              </div>
+            </div>
+
+            <div class="starter-section">
+              <div class="section-title-row"><h2>Start with a prompt</h2><span>CHOOSE A DIRECTION</span></div>
+              <div class="starter-grid">
+                <button class="starter-card" type="button" data-prompt="Walk me through a practical example of a concept in this subject."><span class="starter-icon">↗</span><strong>Try an example</strong><small>Learn by seeing an idea in action</small></button>
+                <button class="starter-card" type="button" data-prompt="Explain a key concept in this subject in clear steps, with an analogy."><span class="starter-icon">⌕</span><strong>Explore a concept</strong><small>Make a tricky topic feel intuitive</small></button>
+                <button class="starter-card" type="button" data-prompt="Create a concise study guide for an important topic in this subject."><span class="starter-icon">▤</span><strong>Build a study guide</strong><small>Turn a topic into a clear summary</small></button>
+              </div>
+            </div>
+          </div>
+
+          <div id="messages" class="messages" aria-live="polite" aria-label="Conversation"></div>
+          <div id="typing-indicator" class="typing-indicator" role="status" hidden><span class="typing-dots"><i></i><i></i><i></i></span><span>Thinking through your question…</span></div>
+
+          <div class="composer-wrap">
+            <div class="composer-meta">
+              <div class="level-picker" role="group" aria-label="Learning level">
+                <span>ANSWER LEVEL</span>
+                <button class="level-button selected" data-level="Beginner" type="button" aria-pressed="true">Beginner</button>
+                <button class="level-button" data-level="Intermediate" type="button" aria-pressed="false">Intermediate</button>
+                <button class="level-button" data-level="Advanced" type="button" aria-pressed="false">Advanced</button>
+              </div>
+              <span id="selected-subject" class="selected-subject"><span aria-hidden="true">✳</span> AI/ML</span>
+            </div>
+            <form id="chat-form" class="composer">
+              <button id="attach-button" class="attach-button" type="button" aria-label="Attach files from your device" title="Attach text files">＋</button>
+              <input id="file-input" type="file" multiple hidden>
+              <textarea id="message-input" rows="1" maxlength="8000" placeholder="Ask a question or describe what you'd like to learn…" aria-label="Your message"></textarea>
+              <button id="send-button" class="send-button" type="submit" aria-label="Send message" title="Send message"><span aria-hidden="true">↑</span></button>
+            </form>
+            <div id="attachment-list" class="attachment-list" aria-live="polite" hidden></div>
+            <div class="composer-footer"><span><kbd>Enter</kbd> to send <span class="footer-divider">·</span> <kbd>Shift + Enter</kbd> for a new line</span><span><span class="composer-local-dot"></span> Processed by your local model</span></div>
+          </div>
+        </section>
+
+        <aside id="context-panel" class="context-panel" aria-label="Session context">
+          <div class="context-header"><div><span class="context-eyebrow">YOUR SESSION</span><h2>Learning context</h2></div><button id="close-context" class="icon-button context-close" type="button" aria-label="Close session context">×</button></div>
+          <section class="context-card">
+            <div class="context-card-heading"><span class="context-symbol">✳</span><h3>Learning area</h3></div>
+            <p id="context-subject">AI/ML</p>
+            <span class="context-detail">Used to tailor your explanations</span>
+          </section>
+          <section class="context-card">
+            <div class="context-card-heading"><span class="context-symbol">Aa</span><h3>Answer level</h3></div>
+            <p id="context-level">Beginner</p>
+            <span class="context-detail">Adjust the level above the composer</span>
+          </section>
+          <section class="context-card model-context-card">
+            <div class="context-card-heading"><span class="context-symbol">◉</span><h3>Local model</h3></div>
+            <p id="context-model">Connecting…</p>
+            <span id="context-model-status" class="context-detail">Checking Ollama availability</span>
+          </section>
+          <div class="context-note"><span class="note-icon" aria-hidden="true">⌑</span><div><strong>Your work stays local</strong><p>Questions and attached text files are sent to the Ollama model configured on your device.</p></div></div>
+          <div class="context-spacer"></div>
+          <div class="context-footer"><span class="footer-sparkle">✳</span><span>One concept at a time.<br><strong>Keep learning at your pace.</strong></span></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div id="mobile-backdrop" class="mobile-backdrop" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
