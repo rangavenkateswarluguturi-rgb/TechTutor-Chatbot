@@ -1,4 +1,4 @@
-# TechTutor AI
+# TechTutor-Chatbot
 
 A beginner-friendly engineering tutor powered by your own locally installed Ollama model. Your chats and preferences are stored in a local SQLite database; prompts are sent to Ollama on your computer, not to a paid AI service.
 
